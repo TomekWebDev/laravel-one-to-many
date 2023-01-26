@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\Category;
+use App\User;
 
 class PostController extends Controller
 {
@@ -24,12 +25,19 @@ class PostController extends Controller
         $user = Auth::user();
         // $posts = Post::with('category')->paginate(10);
 
-        $posts = Post::All();
+        // $posts = Post::with('category');
+
+        $data = [
+            'posts' => Post::with('category')->get()
+            // 'categories' => Category::All()
+        ];
+
+
 
 
         // posso creare la solita array multidimensionale $data per portarmi dentro entrambe le variabili che ho salvato
 
-        return view('admin.post.index', compact('posts', 'user'));
+        return view('admin.post.index', $data, compact('user'));
     }
 
     /**
@@ -41,8 +49,11 @@ class PostController extends Controller
     {
 
         $categories = Category::All();
+        $userId = Auth::user();
 
-        return view('admin.post.create', compact('categories'));
+
+
+        return view('admin.post.create', compact('categories', 'userId'));
     }
 
     /**
@@ -69,6 +80,7 @@ class PostController extends Controller
 
         $new_post = new Post();
         $new_post->fill($data);
+        $new_post->user_id = Auth::user()->id;
 
         $new_post->save();
 

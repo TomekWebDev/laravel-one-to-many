@@ -13,11 +13,12 @@
             <div class="card-body">
                 <h4 class="card-title">{{ $item->title }}</h4>
 
+                <p class="card-text">{{ $item->body }}</p>
+
                 @if ($item->category)
-                    <h6 class="card-subtitle">{{ $item->category->name }}</h6>
+                    <h6 class="">{{ $item->category->name }}</h6>
                 @endif
 
-                <p class="card-text">{{ $item->body }}</p>
                 <a href="{{ route('admin.post.show', $item->id) }}" class="btn btn-primary">Show</a>
                 <a href="{{ route('admin.post.edit', $item->id) }}" class="btn btn-warning">Edit</a>
                 <form action="{{ route('admin.post.destroy', $item->id) }}" method="POST">
@@ -30,4 +31,6 @@
             </div>
         </div>
     @endforeach
+
+    {{-- {{ $posts->links() }} --}}
 @endsection

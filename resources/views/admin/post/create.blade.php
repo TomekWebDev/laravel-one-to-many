@@ -12,6 +12,8 @@
         </div>
     @endif
 
+    {{-- {{ Auth::user()->id }} --}}
+
 
     <form method="POST" action="{{ route('admin.post.store') }}" class="mx-5 my-3">
 

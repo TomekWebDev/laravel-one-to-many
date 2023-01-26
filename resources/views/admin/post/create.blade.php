@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('main')
+@section('content')
 
     @if ($errors->any())
         <div class="alert alert-danger my-3">
@@ -46,3 +46,5 @@
 
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
+
+@endsection

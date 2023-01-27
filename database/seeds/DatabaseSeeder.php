@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
                 PostSeeder::class,
-                CategorySeeder::class // l'ordine con cui li scrivo è importante a seconda delle relazioni della tabella
+                CategorySeeder::class,
+                TagSeeder::class // l'ordine con cui li scrivo è importante a seconda delle relazioni della tabella
             ]
         );
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\Category;
+use App\Tag;
 use App\User;
 
 class PostController extends Controller
@@ -28,7 +29,7 @@ class PostController extends Controller
         // $posts = Post::with('category');
 
         $data = [
-            'posts' => Post::with('category')->get()
+            'posts' => Post::with('category', 'tags')->get()
             // 'categories' => Category::All()
         ];
 
@@ -49,11 +50,12 @@ class PostController extends Controller
     {
 
         $categories = Category::All();
+        $tags = Tag::All();
         $userId = Auth::user();
 
 
 
-        return view('admin.post.create', compact('categories', 'userId'));
+        return view('admin.post.create', compact('categories', 'tags', 'userId'));
     }
 
     /**
@@ -84,6 +86,12 @@ class PostController extends Controller
 
         $new_post->save();
 
+        //controllo dopo aver fatto l'array prodotta dalla checkbox nella create
+
+        if (array_key_exists('tags', $data)) {
+            $new_post->tags()->sync($data['tags']);
+        }
+
         return redirect()->route('admin.post.show', ['post' => $new_post->id]);
     }
 
@@ -113,7 +121,9 @@ class PostController extends Controller
 
         $categories = Category::All();
 
-        return view('admin.post.edit', compact('post_to_edit', 'categories'));
+        $tags = Tag::All();
+
+        return view('admin.post.edit', compact('post_to_edit', 'categories', 'tags'));
     }
 
     /**
@@ -137,6 +147,12 @@ class PostController extends Controller
             ]
         );
         $post_to_edit->update($data);
+
+        if (array_key_exists('tags', $data)) {
+            $post_to_edit->tags()->sync($data['tags']);
+        } else {
+            $post_to_edit->tags()->sync([]);
+        }
 
         return redirect()->route('admin.post.show', $post_to_edit->id)->with('success', "Hai modificato con successo il post: $post_to_edit->title");
     }
